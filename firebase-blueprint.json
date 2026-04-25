@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Represents a student or admin in the Skill Forge realm.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "admin"] },
+        "avatar": { "type": "string" },
+        "level": { "type": "integer" },
+        "xp": { "type": "integer" },
+        "streak": { "type": "integer" },
+        "lastActive": { "type": "string", "format": "date-time" },
+        "badges": { "type": "array", "items": { "type": "string" } },
+        "subjects": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Course": {
+      "title": "Quest (Course)",
+      "description": "A learning path available in the realm.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "difficulty": { "type": "string", "enum": ["Apprentice", "Journeyman", "Master"] },
+        "questGiver": { "type": "string" },
+        "xpReward": { "type": "integer" },
+        "modules": { "type": "array", "items": { "type": "object" } }
+      },
+      "required": ["title", "description", "category"]
+    },
+    "Enrollment": {
+      "title": "Quest Progress",
+      "description": "Tracking a student's progress in a quest.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "progress": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "completed"] },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "courseId", "status"]
+    },
+    "Certificate": {
+      "title": "Trophy (Certificate)",
+      "description": "A certificate uploaded by a student.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "verified": { "type": "boolean" },
+        "uploadedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "imageUrl", "verified"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and stats."
+    },
+    "/courses/{courseId}": {
+      "schema": "Course",
+      "description": "Available quests in the realm."
+    },
+    "/enrollments/{enrollmentId}": {
+      "schema": "Enrollment",
+      "description": "Tracked quest progress."
+    },
+    "/certificates/{certId}": {
+      "schema": "Certificate",
+      "description": "Uploaded trophies and certificates."
+    }
+  }
+}
